@@ -1,6 +1,7 @@
 {
-  "short_name": "Chatbot UI",
-  "name": "Chatbot UI",
+  "short_name": "MentalShield Project",
+  "name": "MentalShield Project",
+  "description": "AI-powered mental health research platform",
   "icons": [
     {
       "src": "/icon-192x192.png",

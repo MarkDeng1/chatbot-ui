@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "Starting Chatbot UI on all network interfaces..."
+echo "Starting MentalShield Project on all network interfaces..."
 echo "External access: http://20.5.19.78:3000"
 echo "Local access: http://localhost:3000"
 

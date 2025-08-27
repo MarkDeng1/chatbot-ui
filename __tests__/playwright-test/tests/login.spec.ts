@@ -1,10 +1,10 @@
 import { test, expect } from '@playwright/test';
 
-test('start chatting is displayed', async ({ page }) => {
+test('join research is displayed', async ({ page }) => {
   await page.goto('http://localhost:3000/');
-
-  //expect the start chatting link to be visible
-  await expect (page.getByRole('link', { name: 'Start Chatting' })).toBeVisible();
+  
+  //expect the join research link to be visible
+  await expect (page.getByRole('link', { name: 'Join Research' })).toBeVisible();
 });
 
 test('No password error message', async ({ page }) => {
