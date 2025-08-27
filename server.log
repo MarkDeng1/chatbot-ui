@@ -1,0 +1,130 @@
+
+> chatbot-ui@2.0.0 dev
+> next dev
+
+   ▲ Next.js 14.1.0
+   - Local:        http://localhost:3000
+   - Environments: .env.local
+
+> [PWA] PWA support is disabled
+> [PWA] PWA support is disabled
+ ✓ Ready in 3.3s
+ ○ Compiling /middleware ...
+ ✓ Compiled /middleware in 2.1s (157 modules)
+No valid locales in accept-language header: *
+Reverting to using defaultLocale: en
+ ○ Compiling /[locale] ...
+Browserslist: caniuse-lite is outdated. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+ ✓ Compiled /[locale]/login in 25.6s (1004 modules)
+
+ ⚠ metadata.metadataBase is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+ ⨯ app/[locale]/login/page.tsx (45:12) @ Login
+ ⨯ Error: JSON object requested, multiple (or no) rows returned
+    at Login (./app/[locale]/login/page.tsx:52:19)
+[0m [90m 43 |[39m[0m
+[0m [90m 44 |[39m     [36mif[39m ([33m![39mhomeWorkspace) {[0m
+[0m[31m[1m>[22m[39m[90m 45 |[39m       [36mthrow[39m [36mnew[39m [33mError[39m(error[33m.[39mmessage)[0m
+[0m [90m    |[39m            [31m[1m^[22m[39m[0m
+[0m [90m 46 |[39m     }[0m
+[0m [90m 47 |[39m[0m
+[0m [90m 48 |[39m     [36mreturn[39m redirect([32m`/${homeWorkspace.id}/chat`[39m)[0m
+ ⨯ app/[locale]/login/page.tsx (45:12) @ Login
+ ⨯ Error: JSON object requested, multiple (or no) rows returned
+    at Login (./app/[locale]/login/page.tsx:52:19)
+digest: "3398518265"
+[0m [90m 43 |[39m[0m
+[0m [90m 44 |[39m     [36mif[39m ([33m![39mhomeWorkspace) {[0m
+[0m[31m[1m>[22m[39m[90m 45 |[39m       [36mthrow[39m [36mnew[39m [33mError[39m(error[33m.[39mmessage)[0m
+[0m [90m    |[39m            [31m[1m^[22m[39m[0m
+[0m [90m 46 |[39m     }[0m
+[0m [90m 47 |[39m[0m
+[0m [90m 48 |[39m     [36mreturn[39m redirect([32m`/${homeWorkspace.id}/chat`[39m)[0m
+ ⨯ app/[locale]/login/page.tsx (45:12) @ Login
+ ⨯ Error: JSON object requested, multiple (or no) rows returned
+    at Login (./app/[locale]/login/page.tsx:52:19)
+[0m [90m 43 |[39m[0m
+[0m [90m 44 |[39m     [36mif[39m ([33m![39mhomeWorkspace) {[0m
+[0m[31m[1m>[22m[39m[90m 45 |[39m       [36mthrow[39m [36mnew[39m [33mError[39m(error[33m.[39mmessage)[0m
+[0m [90m    |[39m            [31m[1m^[22m[39m[0m
+[0m [90m 46 |[39m     }[0m
+[0m [90m 47 |[39m[0m
+[0m [90m 48 |[39m     [36mreturn[39m redirect([32m`/${homeWorkspace.id}/chat`[39m)[0m
+No valid locales in accept-language header: *
+Reverting to using defaultLocale: en
+ ⨯ app/[locale]/login/page.tsx (45:12) @ Login
+ ⨯ Error: JSON object requested, multiple (or no) rows returned
+    at Login (./app/[locale]/login/page.tsx:52:19)
+[0m [90m 43 |[39m[0m
+[0m [90m 44 |[39m     [36mif[39m ([33m![39mhomeWorkspace) {[0m
+[0m[31m[1m>[22m[39m[90m 45 |[39m       [36mthrow[39m [36mnew[39m [33mError[39m(error[33m.[39mmessage)[0m
+[0m [90m    |[39m            [31m[1m^[22m[39m[0m
+[0m [90m 46 |[39m     }[0m
+[0m [90m 47 |[39m[0m
+[0m [90m 48 |[39m     [36mreturn[39m redirect([32m`/${homeWorkspace.id}/chat`[39m)[0m
+ ⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ ✓ Compiled in 1862ms (1004 modules)
+
+ ⚠ metadata.metadataBase is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+Error fetching home workspace: {
+  code: 'PGRST116',
+  details: 'The result contains 0 rows',
+  hint: null,
+  message: 'JSON object requested, multiple (or no) rows returned'
+}
+ ✓ Compiled in 1008ms (1004 modules)
+
+ ⚠ metadata.metadataBase is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+Error fetching home workspace: {
+  code: 'PGRST116',
+  details: 'The result contains 0 rows',
+  hint: null,
+  message: 'JSON object requested, multiple (or no) rows returned'
+}
+Error fetching home workspace: {
+  code: 'PGRST116',
+  details: 'The result contains 0 rows',
+  hint: null,
+  message: 'JSON object requested, multiple (or no) rows returned'
+}
+ ✓ Compiled in 1772ms (1004 modules)
+
+ ⚠ metadata.metadataBase is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+Error fetching home workspace: {
+  code: 'PGRST116',
+  details: 'The result contains 0 rows',
+  hint: null,
+  message: 'JSON object requested, multiple (or no) rows returned'
+}
+Error fetching home workspace: {
+  code: 'PGRST116',
+  details: 'The result contains 0 rows',
+  hint: null,
+  message: 'JSON object requested, multiple (or no) rows returned'
+}
+Error fetching home workspace: {
+  code: 'PGRST116',
+  details: 'The result contains 0 rows',
+  hint: null,
+  message: 'JSON object requested, multiple (or no) rows returned'
+}
+Error fetching home workspace: {
+  code: 'PGRST116',
+  details: 'The result contains 0 rows',
+  hint: null,
+  message: 'JSON object requested, multiple (or no) rows returned'
+}
+Error fetching home workspace: {
+  code: 'PGRST116',
+  details: 'The result contains 0 rows',
+  hint: null,
+  message: 'JSON object requested, multiple (or no) rows returned'
+}
+Error fetching home workspace: {
+  code: 'PGRST116',
+  details: 'The result contains 0 rows',
+  hint: null,
+  message: 'JSON object requested, multiple (or no) rows returned'
+}
+[?25h

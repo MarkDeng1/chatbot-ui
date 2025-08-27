@@ -11,6 +11,7 @@ import { ChatbotUIContext } from "@/context/context"
 import useHotkey from "@/lib/hooks/use-hotkey"
 import { useTheme } from "next-themes"
 import { useContext } from "react"
+import { WelcomeDialog } from "@/components/ui/welcome-dialog"
 
 export default function ChatPage() {
   useHotkey("o", () => handleNewChat())
@@ -25,7 +26,8 @@ export default function ChatPage() {
   const { theme } = useTheme()
 
   return (
-    <>
+    <div className="relative h-full">
+      <WelcomeDialog />
       {chatMessages.length === 0 ? (
         <div className="relative flex h-full flex-col items-center justify-center">
           <div className="top-50% left-50% -translate-x-50% -translate-y-50% absolute mb-20">
@@ -53,6 +55,6 @@ export default function ChatPage() {
       ) : (
         <ChatUI />
       )}
-    </>
+    </div>
   )
 }

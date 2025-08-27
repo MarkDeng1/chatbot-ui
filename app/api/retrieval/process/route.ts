@@ -1,4 +1,4 @@
-import { generateLocalEmbedding } from "@/lib/generate-local-embedding"
+// import { generateLocalEmbedding } from "@/lib/generate-local-embedding"
 import {
   processCSV,
   processJSON,
@@ -124,17 +124,13 @@ export async function POST(req: Request) {
         return item.embedding
       })
     } else if (embeddingsProvider === "local") {
-      const embeddingPromises = chunks.map(async chunk => {
-        try {
-          return await generateLocalEmbedding(chunk.content)
-        } catch (error) {
-          console.error(`Error generating embedding for chunk: ${chunk}`, error)
-
-          return null
+      // Local embeddings temporarily disabled for deployment
+      return new NextResponse(
+        "Local embeddings are temporarily disabled. Please use OpenAI embeddings.",
+        {
+          status: 400
         }
-      })
-
-      embeddings = await Promise.all(embeddingPromises)
+      )
     }
 
     const file_items = chunks.map((chunk, index) => ({
@@ -146,10 +142,7 @@ export async function POST(req: Request) {
         embeddingsProvider === "openai"
           ? ((embeddings[index] || null) as any)
           : null,
-      local_embedding:
-        embeddingsProvider === "local"
-          ? ((embeddings[index] || null) as any)
-          : null
+      local_embedding: null // Local embeddings disabled
     }))
 
     await supabaseAdmin.from("file_items").upsert(file_items)

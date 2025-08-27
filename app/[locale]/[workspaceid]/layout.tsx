@@ -29,7 +29,7 @@ export default function WorkspaceLayout({ children }: WorkspaceLayoutProps) {
 
   const params = useParams()
   const searchParams = useSearchParams()
-  const workspaceId = params.workspaceid as string
+  const workspaceId = params ? (params.workspaceid as string) : ""
 
   const {
     setChatSettings,
@@ -157,9 +157,10 @@ export default function WorkspaceLayout({ children }: WorkspaceLayoutProps) {
     setModels(modelData.models)
 
     setChatSettings({
-      model: (searchParams.get("model") ||
-        workspace?.default_model ||
-        "gpt-4-1106-preview") as LLMID,
+      model:
+        ((searchParams ? searchParams.get("model") : "") as LLMID) ||
+        (workspace?.default_model as LLMID) ||
+        ("gpt-4-1106-preview" as LLMID),
       prompt:
         workspace?.default_prompt ||
         "You are a friendly, helpful AI assistant.",

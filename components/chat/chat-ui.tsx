@@ -66,7 +66,7 @@ export const ChatUI: FC<ChatUIProps> = ({}) => {
       setIsAtBottom(true)
     }
 
-    if (params.chatid) {
+    if (params && params.chatid) {
       fetchData().then(() => {
         handleFocusChatInput()
         setLoading(false)
@@ -77,6 +77,8 @@ export const ChatUI: FC<ChatUIProps> = ({}) => {
   }, [])
 
   const fetchMessages = async () => {
+    if (!params || !params.chatid) return
+
     const fetchedMessages = await getMessagesByChatId(params.chatid as string)
 
     const imagePromises: Promise<MessageImage>[] = fetchedMessages.flatMap(
@@ -151,6 +153,8 @@ export const ChatUI: FC<ChatUIProps> = ({}) => {
   }
 
   const fetchChat = async () => {
+    if (!params || !params.chatid) return
+
     const chat = await getChatById(params.chatid as string)
     if (!chat) return
 
