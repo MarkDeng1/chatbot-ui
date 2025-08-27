@@ -17,7 +17,7 @@ export async function POST(request: Request) {
 
     // Get request body
     const body = await request.json()
-    const { characterId, characterName } = body
+    const { characterId, characterName, systemPrompt } = body
 
     // Get or create user's workspace
     const { data: workspace, error: workspaceError } = await supabase
@@ -44,7 +44,16 @@ export async function POST(request: Request) {
           {
             user_id: user.id,
             name: "My Workspace",
-            description: "Default workspace"
+            description: "Default workspace",
+            default_context_length: 4096,
+            default_model: "gpt-3.5-turbo",
+            default_prompt: "You are a helpful AI assistant.",
+            default_temperature: 0.7,
+            embeddings_provider: "openai",
+            include_profile_context: true,
+            include_workspace_instructions: true,
+            instructions: "Be helpful and informative.",
+            is_home: true
           }
         ])
         .select()
@@ -68,9 +77,11 @@ export async function POST(request: Request) {
         {
           user_id: user.id,
           workspace_id: workspaceId,
-          name: `Conversation with ${characterName}`,
+          name: `${characterName}`,
           model: "gpt-3.5-turbo",
-          prompt: `Hi there, I am ${characterName}. Start to talk with me!`,
+          prompt:
+            systemPrompt ||
+            `Hi there, I am ${characterName}. Start to talk with me!`,
           temperature: 0.7,
           context_length: 4096,
           embeddings_provider: "openai",

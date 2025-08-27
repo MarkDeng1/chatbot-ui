@@ -562,6 +562,53 @@ export type Database = {
           },
         ]
       }
+      emoji_surveys: {
+        Row: {
+          created_at: string
+          emotion_score: number
+          id: string
+          notes: string | null
+          question_text: string
+          session_date: string
+          survey_order: number | null
+          survey_type: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          emotion_score: number
+          id?: string
+          notes?: string | null
+          question_text: string
+          session_date?: string
+          survey_order?: number | null
+          survey_type: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          emotion_score?: number
+          id?: string
+          notes?: string | null
+          question_text?: string
+          session_date?: string
+          survey_order?: number | null
+          survey_type?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "emoji_surveys_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       file_items: {
         Row: {
           content: string
@@ -1386,6 +1433,44 @@ export type Database = {
           },
           {
             foreignKeyName: "tools_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_daily_progress: {
+        Row: {
+          created_at: string
+          extra_surveys_completed: number
+          id: string
+          required_surveys_completed: number
+          session_date: string
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          extra_surveys_completed?: number
+          id?: string
+          required_surveys_completed?: number
+          session_date?: string
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          extra_surveys_completed?: number
+          id?: string
+          required_surveys_completed?: number
+          session_date?: string
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_daily_progress_user_id_fkey"
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "users"

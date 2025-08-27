@@ -6,38 +6,109 @@ import {
   DialogDescription
 } from "@/components/ui/dialog"
 import { Button } from "@/components/ui/button"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useContext } from "react"
+import { ChatbotUIContext } from "@/context/context"
+import { supabase } from "@/lib/supabase/browser-client"
 
-export function WelcomeDialog() {
+interface WelcomeDialogProps {
+  surveyOrder?: number
+  isTimedSurvey?: boolean
+  onComplete?: () => void
+}
+
+export function WelcomeDialog({
+  surveyOrder = 1,
+  isTimedSurvey = false,
+  onComplete
+}: WelcomeDialogProps = {}) {
   const [open, setOpen] = useState(false)
   const [selectedEmotion, setSelectedEmotion] = useState<number | null>(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const { profile } = useContext(ChatbotUIContext)
 
   useEffect(() => {
-    // 添加调试日志
-    console.log("WelcomeDialog mounted")
+    // 如果是通过props控制的survey（定时survey），直接显示
+    if (isTimedSurvey || surveyOrder > 1) {
+      setOpen(true)
+      return
+    }
 
-    // 检查是否是首次登录
-    const hasSeenWelcome = localStorage.getItem("hasSeenWelcome")
-    console.log("hasSeenWelcome:", hasSeenWelcome)
+    // 否则检查每日首次survey状态
+    const checkSurveyStatus = async () => {
+      if (!profile?.user_id) return
 
-    // 强制显示弹窗（用于测试）
-    setOpen(true)
+      try {
+        const response = await fetch(
+          `/api/emoji-survey?userId=${profile.user_id}`
+        )
+        const data = await response.json()
 
-    // 设置标记
-    localStorage.setItem("hasSeenWelcome", "true")
-  }, [])
+        // 如果没有进度数据或完成数为0，显示survey
+        if (!data.progress || data.progress.required_surveys_completed === 0) {
+          setOpen(true)
+        }
+      } catch (error) {
+        console.error("Error checking survey status:", error)
+        setOpen(true)
+      }
+    }
+
+    checkSurveyStatus()
+  }, [profile, isTimedSurvey, surveyOrder])
 
   const handleEmotionSelect = (value: number) => {
     setSelectedEmotion(value)
   }
 
-  const handleConfirm = () => {
-    if (selectedEmotion !== null) {
-      // 这里可以添加提交情绪数据的逻辑
-      console.log("Selected emotion:", selectedEmotion)
+  const handleConfirm = async () => {
+    if (selectedEmotion !== null && profile?.user_id) {
+      setIsSubmitting(true)
 
-      // 选择并确认后关闭弹窗
-      setOpen(false)
+      try {
+        const response = await fetch("/api/emoji-survey", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            userId: profile.user_id,
+            emotionScore: selectedEmotion,
+            questionText: "good about myself",
+            surveyType: "daily_required",
+            surveyOrder: surveyOrder
+          })
+        })
+
+        const data = await response.json()
+
+        if (data.success) {
+          console.log("Survey submitted successfully:", data)
+          setOpen(false)
+
+          // 触发进度更新事件
+          window.dispatchEvent(
+            new CustomEvent("surveyCompleted", {
+              detail: {
+                progress: data.progress || null,
+                surveyOrder: surveyOrder
+              }
+            })
+          )
+
+          // 调用完成回调
+          if (onComplete) {
+            onComplete()
+          }
+        } else {
+          console.error("Failed to submit survey:", data.error)
+          alert(`Failed to submit survey: ${data.error}`)
+        }
+      } catch (error) {
+        console.error("Error submitting survey:", error)
+        alert("Error submitting survey. Please try again.")
+      } finally {
+        setIsSubmitting(false)
+      }
     }
   }
 
@@ -52,7 +123,7 @@ export function WelcomeDialog() {
             Welcome to Chat!
           </DialogTitle>
           <DialogDescription className="text-center">
-            Emo Survey 1/3
+            Emo Survey {surveyOrder}/3
           </DialogDescription>
           <p className="text-muted-foreground mt-2 text-center text-sm">
             Before start, you need to record your current state.
@@ -104,10 +175,10 @@ export function WelcomeDialog() {
           <div className="mt-8 flex justify-center">
             <Button
               onClick={handleConfirm}
-              disabled={selectedEmotion === null}
+              disabled={selectedEmotion === null || isSubmitting}
               className="px-8 py-2"
             >
-              Confirm
+              {isSubmitting ? "Submitting..." : "Confirm"}
             </Button>
           </div>
         </div>

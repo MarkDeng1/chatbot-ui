@@ -11,7 +11,8 @@ import { ChatbotUIContext } from "@/context/context"
 import useHotkey from "@/lib/hooks/use-hotkey"
 import { useTheme } from "next-themes"
 import { useContext } from "react"
-import { WelcomeDialog } from "@/components/ui/welcome-dialog"
+import { EmojiSurveyProgressBar } from "@/components/ui/progress-bar"
+import { ChatTimer } from "@/components/ui/chat-timer"
 
 export default function ChatPage() {
   useHotkey("o", () => handleNewChat())
@@ -27,7 +28,9 @@ export default function ChatPage() {
 
   return (
     <div className="relative h-full">
-      <WelcomeDialog />
+      <ChatTimer
+        onSurveyNeeded={order => console.log(`Survey ${order} needed`)}
+      />
       {chatMessages.length === 0 ? (
         <div className="relative flex h-full flex-col items-center justify-center">
           <div className="top-50% left-50% -translate-x-50% -translate-y-50% absolute mb-20">
@@ -45,6 +48,7 @@ export default function ChatPage() {
           <div className="flex grow flex-col items-center justify-center" />
 
           <div className="w-full min-w-[300px] items-end px-2 pb-3 pt-0 sm:w-[600px] sm:pb-8 sm:pt-5 md:w-[700px] lg:w-[700px] xl:w-[800px]">
+            <EmojiSurveyProgressBar />
             <ChatInput />
           </div>
 

@@ -15,6 +15,8 @@ import { FC, useContext, useEffect, useState } from "react"
 import { ChatHelp } from "./chat-help"
 import { useScroll } from "./chat-hooks/use-scroll"
 import { ChatInput } from "./chat-input"
+import { EmojiSurveyProgressBar } from "@/components/ui/progress-bar"
+import { ChatTimer } from "@/components/ui/chat-timer"
 import { ChatMessages } from "./chat-messages"
 import { ChatScrollButtons } from "./chat-scroll-buttons"
 import { ChatSecondaryButtons } from "./chat-secondary-buttons"
@@ -191,6 +193,9 @@ export const ChatUI: FC<ChatUIProps> = ({}) => {
 
   return (
     <div className="relative flex h-full flex-col items-center">
+      <ChatTimer
+        onSurveyNeeded={order => console.log(`Survey ${order} needed`)}
+      />
       <div className="absolute left-4 top-2.5 flex justify-center">
         <ChatScrollButtons
           isAtTop={isAtTop}
@@ -223,6 +228,7 @@ export const ChatUI: FC<ChatUIProps> = ({}) => {
       </div>
 
       <div className="relative w-full min-w-[300px] items-end px-2 pb-3 pt-0 sm:w-[600px] sm:pb-8 sm:pt-5 md:w-[700px] lg:w-[700px] xl:w-[800px]">
+        <EmojiSurveyProgressBar />
         <ChatInput />
       </div>
 

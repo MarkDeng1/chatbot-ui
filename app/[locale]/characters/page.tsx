@@ -71,7 +71,9 @@ export default function CharactersPage() {
         body: JSON.stringify({
           characterId: character.rank,
           characterName: character.name,
-          systemPrompt: character.systemPrompt // 添加系统提示
+          systemPrompt:
+            (characterPrompts as any)[character.name] ||
+            `You are ${character.name}, a helpful AI assistant.`
         })
       })
 
@@ -81,10 +83,10 @@ export default function CharactersPage() {
 
       const newChat = await response.json()
 
-      // Navigate to new chat page
+      // Navigate to workspace chat page
       router.push(
-        `/${locale}/chat/${newChat.id}?characterName=${character.name}`
-      ) // 传递角色名称
+        `/${locale}/${newChat.workspace_id}/chat/${newChat.id}?characterName=${character.name}`
+      )
     } catch (error) {
       console.error("Failed to create chat:", error)
       // Add error notification here
