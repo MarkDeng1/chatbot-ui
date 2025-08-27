@@ -177,9 +177,9 @@ export default function SetupPage() {
       case 2:
         return (
           <StepContainer
-            stepDescription="You are all set up! Your OpenAI API key has been configured automatically."
+            stepDescription="Please read the project information and consent statement below."
             stepNum={currentStep}
-            stepTitle="Setup Complete"
+            stepTitle="MentalShield Project - Informed Consent"
             onShouldProceed={handleShouldProceed}
             showNextButton={true}
             showBackButton={true}
