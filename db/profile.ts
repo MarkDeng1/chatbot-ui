@@ -2,14 +2,19 @@ import { supabase } from "@/lib/supabase/browser-client"
 import { TablesInsert, TablesUpdate } from "@/supabase/types"
 
 export const getProfileByUserId = async (userId: string) => {
-  const { data: profile, error } = await supabase
+  const { data: profiles, error } = await supabase
     .from("profiles")
     .select("*")
     .eq("user_id", userId)
-    .single()
+    .limit(1)
 
-  if (!profile) {
+  if (error) {
     throw new Error(error.message)
+  }
+
+  const profile = profiles?.[0]
+  if (!profile) {
+    throw new Error(`No profile found for user ID: ${userId}`)
   }
 
   return profile
@@ -29,14 +34,18 @@ export const getProfilesByUserId = async (userId: string) => {
 }
 
 export const createProfile = async (profile: TablesInsert<"profiles">) => {
-  const { data: createdProfile, error } = await supabase
+  const { data: createdProfiles, error } = await supabase
     .from("profiles")
     .insert([profile])
     .select("*")
-    .single()
 
   if (error) {
     throw new Error(error.message)
+  }
+
+  const createdProfile = createdProfiles?.[0]
+  if (!createdProfile) {
+    throw new Error("Failed to create profile")
   }
 
   return createdProfile
@@ -46,15 +55,19 @@ export const updateProfile = async (
   profileId: string,
   profile: TablesUpdate<"profiles">
 ) => {
-  const { data: updatedProfile, error } = await supabase
+  const { data: updatedProfiles, error } = await supabase
     .from("profiles")
     .update(profile)
     .eq("id", profileId)
     .select("*")
-    .single()
 
   if (error) {
     throw new Error(error.message)
+  }
+
+  const updatedProfile = updatedProfiles?.[0]
+  if (!updatedProfile) {
+    throw new Error(`Failed to update profile with ID: ${profileId}`)
   }
 
   return updatedProfile

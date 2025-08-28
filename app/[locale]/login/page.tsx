@@ -34,15 +34,21 @@ export default async function Login({
   const session = (await supabase.auth.getSession()).data.session
 
   if (session) {
-    const { data: homeWorkspace, error } = await supabase
+    const { data: workspaces, error } = await supabase
       .from("workspaces")
       .select("*")
       .eq("user_id", session.user.id)
       .eq("is_home", true)
-      .single()
+      .limit(1)
 
-    if (!homeWorkspace) {
+    if (error) {
       throw new Error(error.message)
+    }
+
+    const homeWorkspace = workspaces?.[0]
+    if (!homeWorkspace) {
+      // 如果没有home workspace，重定向到setup页面让用户创建一个
+      return redirect("/setup")
     }
 
     return redirect(`/${homeWorkspace.id}/chat`)
@@ -65,17 +71,21 @@ export default async function Login({
       return redirect(`/login?message=${error.message}`)
     }
 
-    const { data: homeWorkspace, error: homeWorkspaceError } = await supabase
+    const { data: workspaces, error: homeWorkspaceError } = await supabase
       .from("workspaces")
       .select("*")
       .eq("user_id", data.user.id)
       .eq("is_home", true)
-      .single()
+      .limit(1)
 
+    if (homeWorkspaceError) {
+      throw new Error(homeWorkspaceError.message)
+    }
+
+    const homeWorkspace = workspaces?.[0]
     if (!homeWorkspace) {
-      throw new Error(
-        homeWorkspaceError?.message || "An unexpected error occurred"
-      )
+      // 如果没有home workspace，重定向到setup页面
+      return redirect("/setup")
     }
 
     return redirect(`/${homeWorkspace.id}/chat`)

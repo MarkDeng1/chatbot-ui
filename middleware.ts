@@ -15,15 +15,21 @@ export async function middleware(request: NextRequest) {
     const redirectToChat = session && request.nextUrl.pathname === "/"
 
     if (redirectToChat) {
-      const { data: homeWorkspace, error } = await supabase
+      const { data: workspaces, error } = await supabase
         .from("workspaces")
         .select("*")
         .eq("user_id", session.data.session?.user.id)
         .eq("is_home", true)
-        .single()
+        .limit(1)
 
+      if (error) {
+        console.error("Error fetching workspace:", error)
+        return NextResponse.redirect(new URL("/setup", request.url))
+      }
+
+      const homeWorkspace = workspaces?.[0]
       if (!homeWorkspace) {
-        throw new Error(error?.message)
+        return NextResponse.redirect(new URL("/setup", request.url))
       }
 
       return NextResponse.redirect(

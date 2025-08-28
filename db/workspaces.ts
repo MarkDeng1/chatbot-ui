@@ -2,29 +2,39 @@ import { supabase } from "@/lib/supabase/browser-client"
 import { TablesInsert, TablesUpdate } from "@/supabase/types"
 
 export const getHomeWorkspaceByUserId = async (userId: string) => {
-  const { data: homeWorkspace, error } = await supabase
+  const { data: workspaces, error } = await supabase
     .from("workspaces")
     .select("*")
     .eq("user_id", userId)
     .eq("is_home", true)
-    .single()
+    .limit(1)
 
-  if (!homeWorkspace) {
+  if (error) {
     throw new Error(error.message)
+  }
+
+  const homeWorkspace = workspaces?.[0]
+  if (!homeWorkspace) {
+    throw new Error(`No home workspace found for user ID: ${userId}`)
   }
 
   return homeWorkspace.id
 }
 
 export const getWorkspaceById = async (workspaceId: string) => {
-  const { data: workspace, error } = await supabase
+  const { data: workspaces, error } = await supabase
     .from("workspaces")
     .select("*")
     .eq("id", workspaceId)
-    .single()
+    .limit(1)
 
-  if (!workspace) {
+  if (error) {
     throw new Error(error.message)
+  }
+
+  const workspace = workspaces?.[0]
+  if (!workspace) {
+    throw new Error(`No workspace found with ID: ${workspaceId}`)
   }
 
   return workspace

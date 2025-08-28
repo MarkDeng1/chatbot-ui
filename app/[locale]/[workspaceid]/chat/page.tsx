@@ -13,6 +13,10 @@ import { useTheme } from "next-themes"
 import { useContext } from "react"
 import { EmojiSurveyProgressBar } from "@/components/ui/progress-bar"
 import { ChatTimer } from "@/components/ui/chat-timer"
+import { WithTooltip } from "@/components/ui/with-tooltip"
+import { IconLogout } from "@tabler/icons-react"
+import { useRouter } from "next/navigation"
+import { supabase } from "@/lib/supabase/browser-client"
 
 export default function ChatPage() {
   useHotkey("o", () => handleNewChat())
@@ -21,10 +25,18 @@ export default function ChatPage() {
   })
 
   const { chatMessages } = useContext(ChatbotUIContext)
+  const router = useRouter()
 
   const { handleNewChat, handleFocusChatInput } = useChatHandler()
 
   const { theme } = useTheme()
+
+  const handleSignOut = async () => {
+    await supabase.auth.signOut()
+    router.push("/login")
+    router.refresh()
+    return
+  }
 
   return (
     <div className="relative h-full">
@@ -41,7 +53,20 @@ export default function ChatPage() {
             <QuickSettings />
           </div>
 
-          <div className="absolute right-2 top-2">
+          <div className="absolute right-2 top-2 flex items-center space-x-2">
+            <WithTooltip
+              delayDuration={200}
+              display={<div>退出登录</div>}
+              trigger={
+                <div className="mt-1">
+                  <IconLogout
+                    className="cursor-pointer hover:opacity-50"
+                    size={24}
+                    onClick={handleSignOut}
+                  />
+                </div>
+              }
+            />
             <ChatSettings />
           </div>
 

@@ -4,8 +4,7 @@ import { ContentType } from "@/types"
 import { FC, useContext } from "react"
 import { SIDEBAR_WIDTH } from "../ui/dashboard"
 import { Tabs, TabsContent } from "../ui/tabs"
-import { WorkspaceSwitcher } from "../utility/workspace-switcher"
-import { WorkspaceSettings } from "../workspace/workspace-settings"
+// 已删除WorkspaceSwitcher和WorkspaceSettings的import
 import { SidebarContent } from "./sidebar-content"
 import Link from "next/link"
 import { useParams } from "next/navigation"
@@ -67,11 +66,7 @@ export const Sidebar: FC<SidebarProps> = ({ contentType, showSidebar }) => {
         value={contentType}
       >
         <div className="flex h-full flex-col p-3">
-          <div className="flex items-center border-b-2 pb-2">
-            <WorkspaceSwitcher />
-
-            <WorkspaceSettings />
-          </div>
+          {/* 已删除WorkspaceSwitcher和WorkspaceSettings按钮 */}
 
           <div className="flex flex-col gap-2 py-2">
             <Link

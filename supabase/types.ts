@@ -34,6 +34,68 @@ export type Database = {
   }
   public: {
     Tables: {
+      admin_sessions: {
+        Row: {
+          admin_id: string
+          created_at: string
+          expires_at: string
+          id: string
+          session_token: string
+        }
+        Insert: {
+          admin_id: string
+          created_at?: string
+          expires_at: string
+          id?: string
+          session_token: string
+        }
+        Update: {
+          admin_id?: string
+          created_at?: string
+          expires_at?: string
+          id?: string
+          session_token?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "admin_sessions_admin_id_fkey"
+            columns: ["admin_id"]
+            isOneToOne: false
+            referencedRelation: "admins"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      admins: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          is_active: boolean
+          name: string
+          password_hash: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          is_active?: boolean
+          name: string
+          password_hash: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          is_active?: boolean
+          name?: string
+          password_hash?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       assistant_collections: {
         Row: {
           assistant_id: string
@@ -1548,9 +1610,108 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      admin_user_statistics: {
+        Row: {
+          active_days: number | null
+          avg_emotion_score: number | null
+          display_name: string | null
+          has_onboarded: boolean | null
+          total_chats: number | null
+          total_extra_surveys: number | null
+          total_messages: number | null
+          total_required_surveys: number | null
+          user_created_at: string | null
+          user_id: string | null
+          username: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "profiles_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_activity_stats: {
+        Row: {
+          active_days: number | null
+          avg_emotion_score: number | null
+          current_streak: number | null
+          display_name: string | null
+          has_onboarded: boolean | null
+          latest_chat_date: string | null
+          latest_message_date: string | null
+          latest_survey_date: string | null
+          registration_date: string | null
+          total_chats: number | null
+          total_messages: number | null
+          total_required_surveys: number | null
+          total_surveys: number | null
+          total_voluntary_surveys: number | null
+          user_id: string | null
+          username: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "profiles_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: true
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_emotion_trends: {
+        Row: {
+          daily_avg_emotion: number | null
+          emotion_change: number | null
+          max_emotion: number | null
+          min_emotion: number | null
+          prev_day_avg: number | null
+          required_surveys: number | null
+          session_date: string | null
+          surveys_count: number | null
+          user_id: string | null
+          voluntary_surveys: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "emoji_surveys_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Functions: {
+      check_data_integrity: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          table_name: string
+          issue_type: string
+          issue_count: number
+          description: string
+        }[]
+      }
+      cleanup_expired_admin_sessions: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
+      clear_admin_session: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
+      create_admin_session: {
+        Args: {
+          admin_email: string
+          session_duration_hours?: number
+        }
+        Returns: string
+      }
       create_duplicate_messages_for_new_chat: {
         Args: {
           old_chat_id: string
@@ -1588,6 +1749,104 @@ export type Database = {
           object_path: string
         }
         Returns: Record<string, unknown>
+      }
+      get_admin_dashboard_stats: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          total_users: number
+          active_users_today: number
+          active_users_week: number
+          total_surveys_today: number
+          total_surveys_week: number
+          avg_emotion_today: number
+          avg_emotion_week: number
+          completion_rate_today: number
+        }[]
+      }
+      get_admin_user_details: {
+        Args: {
+          user_uuid: string
+        }
+        Returns: {
+          user_id: string
+          username: string
+          display_name: string
+          email: string
+          bio: string
+          registration_date: string
+          has_onboarded: boolean
+          total_surveys: number
+          total_chats: number
+          total_messages: number
+          active_days: number
+          avg_emotion_score: number
+          latest_activity: string
+        }[]
+      }
+      get_all_users_summary: {
+        Args: Record<PropertyKey, never>
+        Returns: {
+          user_id: string
+          username: string
+          display_name: string
+          email: string
+          registration_date: string
+          has_onboarded: boolean
+          total_surveys: number
+          total_required_surveys: number
+          total_extra_surveys: number
+          total_chats: number
+          total_messages: number
+          active_days: number
+          avg_emotion_score: number
+          latest_survey_date: string
+          latest_activity_date: string
+        }[]
+      }
+      get_user_progress_details: {
+        Args: {
+          target_user_id: string
+          days_back?: number
+        }
+        Returns: {
+          session_date: string
+          required_completed: number
+          extra_completed: number
+          completion_rate: number
+          avg_emotion_score: number
+          emotion_variance: number
+          survey_count: number
+          has_notes: boolean
+        }[]
+      }
+      get_user_recent_emotions: {
+        Args: {
+          user_uuid: string
+          days_back?: number
+        }
+        Returns: {
+          date: string
+          avg_emotion: number
+          survey_count: number
+          notes: string[]
+        }[]
+      }
+      get_user_survey_completion: {
+        Args: {
+          user_uuid: string
+          target_date?: string
+        }
+        Returns: {
+          date: string
+          required_completed: number
+          required_total: number
+          completion_rate: number
+          has_extra_surveys: boolean
+        }[]
+      }
+      is_admin: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
       }
       match_file_items_local: {
         Args: {
@@ -1634,6 +1893,28 @@ export type Database = {
           p_name: string
         }
         Returns: boolean
+      }
+      set_admin_session: {
+        Args: {
+          admin_email: string
+        }
+        Returns: undefined
+      }
+      verify_admin_access: {
+        Args: {
+          admin_email: string
+        }
+        Returns: boolean
+      }
+      verify_admin_session: {
+        Args: {
+          session_token: string
+        }
+        Returns: {
+          admin_id: string
+          email: string
+          name: string
+        }[]
       }
     }
     Enums: {
